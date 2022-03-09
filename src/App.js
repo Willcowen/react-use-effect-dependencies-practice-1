@@ -5,17 +5,26 @@ import "./styles.css";
 
 export default function App() {
   const [dataType, setDataType] = useState("");
-
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   console.log({ data });
 
-  // Write code here.
-  //
+  useEffect(() => {
+   if (dataType === '') {
+     return
+   }
+    fetch(`https://swapi.dev/api/${dataType}/`)
+      .then(res => res.json())
+      .then(json => {
+        setLoading(true);
+        setData(json)
+    })
+  }, [dataType] ) 
 
   return (
     <div>
-      <SelectTypeForm setDataType={setDataType} />
+      <SelectTypeForm setDataType={setDataType}/>
       {data && <DataList dataType={dataType} data={data.results} />}
     </div>
   );
